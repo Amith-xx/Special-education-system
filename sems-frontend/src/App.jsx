@@ -9,7 +9,6 @@ import TherapyPage from "./pages/Therapy/TherapyPage";
 
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 
-import TeacherDashboard from "./pages/Teacher/TeacherDashboard";
 
 import GamesPortal from "./pages/Games/GamePortal";
 import EvaluationHome from "./pages/Evaluation/EvaluationHome";
@@ -27,8 +26,7 @@ function App() {
 
         {/* DASHBOARDS */}
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
-       <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
-        
+      
         {/* OTHER FEATURES */}
         <Route path="/behavior" element={<BehaviorPage />} />
         <Route path="/therapy" element={<TherapyPage />} />
