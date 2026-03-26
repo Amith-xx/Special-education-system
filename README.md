@@ -8,7 +8,7 @@ The Special Education Management System (SEMS) is designed to assist in the mana
 - **IEP Management**: Create and manage Individualized Education Plans (IEP) for students, ensuring personalized educational strategies.
 - **Progress Tracking**: Monitor and report on student progress through assessments and performance metrics.
 - **Resource Management**: Manage educational resources and materials needed for effective teaching.
-- **Communication Tools**: Facilitate communication among teachers, parents, and specialists.
+- **Communication Tools**: Facilitate communication among teachers and specialists.
 
 ## Installation
 1. Clone the repository: `git clone https://github.com/Amith-xx/Special-education-system.git`
@@ -16,7 +16,7 @@ The Special Education Management System (SEMS) is designed to assist in the mana
 3. Install required dependencies using: `npm install` (or the relevant package manager for your project)
 
 ## Usage
-To run the application, use the following command: `npm start` (or the relevant command based on your setup).
+To run the application,go to  use the following command: `npm run dev` (or the relevant command based on your setup).
 
 ## Contributing
 We welcome contributions from the community. Please fork the repository and submit a pull request for any planned improvements or feature additions.
