@@ -10,12 +10,26 @@ router.post("/add", authenticate, async (req, res) => {
     if (!["teacher", "admin"].includes(req.user.role)) {
       return res.status(403).json({ message: "Not allowed" });
     }
-    const log = await TherapyLog.create({ ...req.body, createdBy: req.user.id });
+
+    const log = await TherapyLog.create({
+      studentId: req.body.studentId,
+      therapyType: req.body.therapyType,
+      notes: req.body.notes,
+      progress: req.body.progress,
+      date: req.body.date,
+      createdBy: req.user.id,
+    });
+
     res.status(201).json(log);
-  } catch {
-    res.status(500).json({ message: "Failed to add therapy log" });
+  } catch (err) {
+    console.error("Therapy add error:", err); // 👈 CRITICAL
+    res.status(500).json({
+      message: "Failed to add therapy log",
+      error: err.message,
+    });
   }
 });
+
 
 router.get("/", authenticate, async (req, res) => {
   if (!["teacher", "admin"].includes(req.user.role)) {

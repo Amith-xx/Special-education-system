@@ -1,34 +1,29 @@
+// components/AddBehaviorModal.jsx
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
-import axios from "axios";
+import { addBehaviorLog } from "../api/behaviorApi";
 
-const AddBehaviorModal = ({ onClose, onAdded }) => {
-  const [studentName, setStudentName] = useState("");
+const AddBehaviorModal = ({ onClose, onAdded, students }) => {
+  const [studentId, setStudentId] = useState("");
   const [mood, setMood] = useState("Happy");
-  const [incidents, setIncidents] = useState(0);
   const [notes, setNotes] = useState("");
 
-  const teacherName = localStorage.getItem("userName"); // save this during login
   const today = new Date().toISOString().split("T")[0];
 
   const handleSubmit = async () => {
+    if (!studentId) {
+      alert("Please select a student");
+      return;
+    }
+
     try {
-      const { data } = await axios.post(
-        "http://localhost:5050/api/behavior/add",
-        {
-          studentName,
-          mood: mood.toLowerCase(),
-          incidents,
-          notes,
-          date: today,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
+      const { data } = await addBehaviorLog({
+        studentId,
+        mood: mood.toLowerCase(),
+        notes,
+        date: today,
+      });
 
       onAdded(data);
       onClose();
@@ -62,13 +57,19 @@ const AddBehaviorModal = ({ onClose, onAdded }) => {
 
         {/* Student */}
         <div>
-          <label className="font-semibold text-gray-700">Student Name</label>
-          <input
-            type="text"
-            className="w-full px-4 py-3 mt-1 border rounded-xl bg-gray-50 shadow-sm focus:border-blue-600 outline-none"
-            value={studentName}
-            onChange={(e) => setStudentName(e.target.value)}
-          />
+          <label className="font-semibold text-gray-700">Student</label>
+          <select
+            className="w-full px-4 py-3 mt-1 border rounded-xl bg-gray-50 shadow-sm"
+            value={studentId}
+            onChange={(e) => setStudentId(e.target.value)}
+          >
+            <option value="">Select Student</option>
+            {students.map((s) => (
+              <option key={s._id} value={s._id}>
+                {s.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Mood */}
@@ -85,17 +86,6 @@ const AddBehaviorModal = ({ onClose, onAdded }) => {
           </select>
         </div>
 
-        {/* Incidents */}
-        <div>
-          <label className="font-semibold text-gray-700">Incidents</label>
-          <input
-            type="number"
-            className="w-full px-4 py-3 mt-1 border rounded-xl bg-gray-50 shadow-sm"
-            value={incidents}
-            onChange={(e) => setIncidents(Number(e.target.value))}
-          />
-        </div>
-
         {/* Notes */}
         <div>
           <label className="font-semibold text-gray-700">Notes</label>
@@ -110,7 +100,11 @@ const AddBehaviorModal = ({ onClose, onAdded }) => {
         {/* Submit */}
         <button
           onClick={handleSubmit}
-          className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition"
+          disabled={!studentId}
+          className={`w-full py-3 rounded-xl font-bold shadow-lg transition ${!studentId
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
+            }`}
         >
           Save Log
         </button>

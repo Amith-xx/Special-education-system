@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { loginUser } from "../../api/authApi";
 import { motion } from "framer-motion";
 import Input from "../../components/UI/Input";
+import { useNavigate } from "react-router-dom";
+
 import Button from "../../components/UI/Button";
 
 const LoginPage = () => {
@@ -10,32 +12,28 @@ const LoginPage = () => {
 
   const [error, setError] = useState("");
 
- const handleLogin = async () => {
+const navigate = useNavigate();
+
+const handleLogin = async () => {
   try {
     const { data } = await loginUser({ email, password });
 
-    // Save token and role
     localStorage.setItem("accessToken", data.accessToken);
     localStorage.setItem("role", data.role);
     localStorage.setItem("fullName", data.fullName);
 
-    alert("Login Successful!");
-    localStorage.setItem("userName", data.user?.fullName);
-
-
-    // redirect based on role
-  if (data.role === "admin") {
-  window.location.href = "/admin/dashboard";
-} else if (data.role === "teacher") {
-  window.location.href = "/teacher/dashboard";
-} else {
-  alert("Only admin/teacher login supported");
-}
-
+    if (data.role === "admin") {
+      navigate("/admin/dashboard");
+    } else if (data.role === "teacher") {
+      navigate("/teacher/dashboard");
+    } else {
+      alert("Access denied");
+    }
   } catch (err) {
     setError(err.response?.data?.message || "Login failed");
   }
 };
+
 
 
   return (

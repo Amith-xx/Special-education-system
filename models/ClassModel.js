@@ -14,11 +14,11 @@ const classSchema = new mongoose.Schema({
     required: true,
   },
 
-  academicYearId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "AcademicSchema",
-    required: true,   // ⭐ Highly recommended
-  }
+  //academicYearId: {
+   // type: mongoose.Schema.Types.ObjectId,
+    //ref: "AcademicSchema",
+    //required: true,
+ // }
 });
 
 export default mongoose.model("Class", classSchema);

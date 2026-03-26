@@ -12,3 +12,5 @@ export const getClassesByYearAndCategory = (academicYearId, categoryId) =>
     params: { academicYearId, categoryId },
   });
 
+export const deleteClass = (id) => API.delete(`/api/admin/deleteClass/${id}`);
+export const updateClass = (id, data) => API.put(`/api/admin/updateClass/${id}`, data);

@@ -9,6 +9,7 @@ import AdminFunc from "./routes/AdminFunctions.js";
 import TeacherFunc from "./routes/TeacherFunctions.js";
 import TherapyRoutes from "./routes/TherapyRoutes.js";
 import BehaviorRoutes from "./routes/BehaviorRoutes.js";
+import AIRoutes from "./routes/AIRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -25,6 +26,7 @@ app.use("/api/admin", AdminFunc);          // admin routes
 app.use("/api/teacher", TeacherFunc);      // teacher routes
 app.use("/api/therapy", TherapyRoutes);    // therapy logs
 app.use("/api/behavior", BehaviorRoutes);  // behavior logs
+app.use("/api/ai", AIRoutes);              // AI reports
 
 app.listen(PORT, () => {
   console.log(`Server running → http://localhost:${PORT}`);

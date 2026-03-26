@@ -4,37 +4,47 @@ const evaluationSchema = new mongoose.Schema(
   {
     studentId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Student",
+      ref: "Student",   // ✅ FIXED
       required: true,
     },
+
+    classId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Class",
+      required: true,
+    },
+
     subjectId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Subject",
+      ref: "Subject",   // ✅ FIXED
       required: true,
     },
+
     termId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Term",
-    required: true,
-  },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Term",
+      required: true,
+    },
 
     score: {
-    type: Number, // 0–100 OR 1–5 scale
-    required: true,
-  },
-    remarks: String,
-    teacherId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      type: Number,
+      required: true,
+      min: 0,
+      max: 100,
     },
-     evaluatedBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Teacher",
-    required: true,
-  },
-  },
-  { timestamps: true } // ⭐ THIS IS THE KEY
-);
 
+    remarks: {
+      type: String,
+      default: "",
+    },
+
+    evaluatedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",      // teacher
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
 
 export default mongoose.model("Evaluation", evaluationSchema);

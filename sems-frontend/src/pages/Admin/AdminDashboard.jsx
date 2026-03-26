@@ -4,18 +4,20 @@ import { motion } from "framer-motion";
 import AddStudentModal from "./AddStudentModal";
 import AddCategoryModal from "./AddCategoryModal";
 import AddAcademicYearModal from "./AddAcademicModal";
+import StudentsPage from "./StudentsPage";
 import AddClassModal from "./AddClassModal";
 import AddTermModal from "./AddTermModal";
 import AddSubjectModal from "./AddSubjectModal";  // ⭐ IMPORT THE NEW MODAL
 import GamePortal from "../Games/GamePortal";   // ⭐ IMPORT THE GAMES PAGE
 import { UserPlus, Users, BookOpen, Layers, Calendar } from "lucide-react";
+import AddTeacherModal from "./AddTeacherModal";
 
-if (!localStorage.getItem("accessToken")) {
-  window.location.href = "/login";
-}
+
+
 
 const AdminDashboard = () => {
   const [showStudentModal, setShowStudentModal] = useState(false);
+  const [showTeacherModal, setShowTeacherModal] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [showAcademicModal, setShowAcademicModal] = useState(false);
   const [showClassModal, setShowClassModal] = useState(false);
@@ -31,7 +33,7 @@ const AdminDashboard = () => {
       name: "Add Teacher",
       icon: <UserPlus className="w-8 h-8" />,
       color: "from-blue-500 to-blue-700",
-      onClick: () => (window.location.href = "/register"),
+      onClick: () => setShowTeacherModal(true),
     },
     {
       name: "Add Student",
@@ -64,11 +66,11 @@ const AdminDashboard = () => {
       onClick: () => setShowCategoryModal(true),
     },
     {
-  name: "Add Subject",
-  icon: <BookOpen className="w-8 h-8" />,
-  color: "from-teal-500 to-emerald-600",
-  onClick: () => setShowSubjectModal(true),
-},
+      name: "Add Subject",
+      icon: <BookOpen className="w-8 h-8" />,
+      color: "from-teal-500 to-emerald-600",
+      onClick: () => setShowSubjectModal(true),
+    },
 
   ];
 
@@ -79,16 +81,12 @@ const AdminDashboard = () => {
       <Sidebar activeNav={activeNav} setActiveNav={setActiveNav} />
 
       {/* MAIN AREA */}
-      <div className="flex-1 p-10 overflow-auto">
-        
+      <div className="flex-1 p-4 pt-16 md:p-10 md:pt-10 overflow-auto">
+
         {/* ⭐ If Games is selected, show Games page directly */}
-        {activeNav === "Games" ? (
-          <GamePortal hideSidebar={true}/>
-
-        ) : activeNav === "Dashboard" ? (
-
+        {activeNav === "Dashboard" && (
           <>
-            <h1 className="text-4xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
+            <h1 className="text-4xl font-bold mb-8">
               Welcome to Admin Portal
             </h1>
 
@@ -96,43 +94,47 @@ const AdminDashboard = () => {
               {actions.map((action, idx) => (
                 <motion.div
                   key={idx}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.1 }}
-                  whileHover={{ scale: 1.05 }}
-                  className={`p-8 rounded-2xl shadow-xl cursor-pointer text-white font-semibold bg-gradient-to-br ${action.color} flex flex-col gap-4 items-center text-center`}
+                  className={`p-8 rounded-2xl shadow-xl cursor-pointer text-white bg-gradient-to-br ${action.color}`}
                   onClick={action.onClick}
                 >
                   {action.icon}
-                  <p className="text-xl">{action.name}</p>
+                  <p>{action.name}</p>
                 </motion.div>
               ))}
             </div>
           </>
-        ) : (
-          <h2 className="text-3xl font-bold">Coming Soon...</h2>
         )}
+
+        {activeNav === "Students" && <StudentsPage />}
+
+        {activeNav === "Games" && <GamePortal hideSidebar />}
+
       </div>
+      <AddTeacherModal
+        open={showTeacherModal}
+        onClose={() => setShowTeacherModal(false)}
+      />
+
 
       <AddStudentModal
         open={showStudentModal}
         onClose={() => setShowStudentModal(false)}
       />
       <AddAcademicYearModal
-      open={showAcademicModal}
-      onClose={()=>setShowAcademicModal(false)} />
-      <AddClassModal 
-      open={showClassModal}
-      onClose={()=>setShowClassModal(false)} />
+        open={showAcademicModal}
+        onClose={() => setShowAcademicModal(false)} />
+      <AddClassModal
+        open={showClassModal}
+        onClose={() => setShowClassModal(false)} />
       <AddTermModal
-      open={showTermModal}
-      onClose={()=>setShowTermModal(false)} />
+        open={showTermModal}
+        onClose={() => setShowTermModal(false)} />
       <AddCategoryModal
-      open={showCategoryModal}
-      onClose={() => setShowCategoryModal(false)}/>
+        open={showCategoryModal}
+        onClose={() => setShowCategoryModal(false)} />
       <AddSubjectModal
-      open={showSubjectModal}
-      onClose={() => setShowSubjectModal(false)}/>
+        open={showSubjectModal}
+        onClose={() => setShowSubjectModal(false)} />
     </div>
   );
 };

@@ -1,66 +1,80 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { LogOut } from "lucide-react";
-import SidebarTherapy from "../../components/SidebarTherapy";
+import Sidebar from "../../components/Sidebar";
+
 import TherapyFilter from "./TherapyFilter";
 import TherapyList from "./TherapyList";
 import TherapyDetailsModal from "../../components/TherapyDetailsModal";
-import { therapyData } from "./therapyData";
+import AddTherapyModal from "../../components/addTherapyModal";
+
+import { getStudents } from "../../api/studentApi";
+import API from "../../api/authApi";
 
 const TherapyPage = () => {
+  const [students, setStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState("");
-  const [selectedDate, setSelectedDate] = useState("05 Feb 2024");
-  const [activeNav, setActiveNav] = useState("Therapy");
-  const [selectedTherapy, setSelectedTherapy] = useState(null);
+  const [selectedDate, setSelectedDate] = useState("");
 
-  const students = ["John Doe", "Jane Smith", "Mike Johnson", "Emily Brown"];
+  const [therapies, setTherapies] = useState([]);
+  const [selectedTherapy, setSelectedTherapy] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+
+  // 🔹 Load students
+  useEffect(() => {
+    getStudents().then((res) => setStudents(res.data));
+  }, []);
+
+  // 🔹 Load therapies
+  const fetchTherapies = () => {
+    if (!selectedStudent) return;
+    API.get("/api/therapy", {
+      params: { studentId: selectedStudent },
+    }).then((res) => setTherapies(res.data));
+  };
+
+  useEffect(fetchTherapies, [selectedStudent]);
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-gray-50 to-blue-50">
-      {/* Sidebar */}
-      <SidebarTherapy activeNav={activeNav} setActiveNav={setActiveNav} />
+    <div className="flex h-screen bg-gray-50">
+      <Sidebar activeNav="Therapy" />
 
-      {/* Main */}
-      <div className="flex-1 overflow-auto">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white shadow-md p-6 flex justify-between items-center sticky top-0 z-10"
+      <div className="flex-1 p-8 overflow-auto">
+        <motion.button
+          onClick={() => setShowAddModal(true)}
+          disabled={!selectedStudent}
+          className="mb-6 px-6 py-3 bg-green-600 text-white rounded-xl"
         >
-          <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Therapy Tracking
-          </h2>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold shadow-lg hover:bg-blue-700 transition-all flex items-center gap-2"
-          >
-            <LogOut className="w-5 h-5" />
-            Log out
-          </motion.button>
-        </motion.div>
+          + Add Therapy Report
+        </motion.button>
 
-        <div className="p-8">
-          {/* Filters */}
-          <TherapyFilter
-            selectedStudent={selectedStudent}
-            setSelectedStudent={setSelectedStudent}
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
-            students={students}
-          />
+        <TherapyFilter
+          selectedStudent={selectedStudent}
+          setSelectedStudent={setSelectedStudent}
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          students={students}
+        />
 
-          {/* Cards/List */}
-          <TherapyList data={therapyData} onSelect={(t) => setSelectedTherapy(t)} />
-        </div>
+        <TherapyList
+          data={therapies}
+          onSelect={(t) => setSelectedTherapy(t)}
+        />
       </div>
 
-      {/* Modal */}
-      <TherapyDetailsModal
-        therapy={selectedTherapy}
-        onClose={() => setSelectedTherapy(null)}
-      />
+      {selectedTherapy && (
+        <TherapyDetailsModal
+          therapy={selectedTherapy}
+          onClose={() => setSelectedTherapy(null)}
+        />
+      )}
+
+      {showAddModal && (
+        <AddTherapyModal
+          studentId={selectedStudent}
+          onClose={() => setShowAddModal(false)}
+          onSuccess={fetchTherapies}
+        />
+      )}
     </div>
   );
 };

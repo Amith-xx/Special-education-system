@@ -1,0 +1,9 @@
+Script started
+Loading .env from: /home/danishz/Projects/SRP/SRP_SEMS/.env
+Connecting to DB...
+DB connected successfully.
+Found 1 teachers.
+
+Teacher: Anice Jhon (ID: 693c268a4a54deb2a2e33240)
+  Classes (ObjectId): 3
+Done.

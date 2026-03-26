@@ -3,12 +3,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import Input from "../../components/UI/Input";
 import Button from "../../components/UI/Button";
-import { addSubject } from "../../api/subjectApi";
+import { addSubject, updateSubject } from "../../api/subjectApi";
 import { getCategories } from "../../api/categoryApi";
 import { getTerms } from "../../api/termApi";
 import { getTeachers } from "../../api/teacherApi";
 
-const AddSubjectModal = ({ open, onClose }) => {
+const AddSubjectModal = ({ open, onClose, initialData = null, onSuccess }) => {
   if (!open) return null;
 
   const [form, setForm] = useState({
@@ -29,6 +29,24 @@ const AddSubjectModal = ({ open, onClose }) => {
     getTeachers().then(res => setTeachers(res.data));
   }, []);
 
+  useEffect(() => {
+    if (initialData) {
+      setForm({
+        name: initialData.name || "",
+        categoryId: initialData.categoryId?._id || initialData.categoryId || "",
+        termId: initialData.termId?._id || initialData.termId || "",
+        teacherId: initialData.teacherId?._id || initialData.teacherId || "",
+      });
+    } else {
+      setForm({
+        name: "",
+        categoryId: "",
+        termId: "",
+        teacherId: "",
+      });
+    }
+  }, [initialData, open]);
+
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -41,11 +59,17 @@ const AddSubjectModal = ({ open, onClose }) => {
     }
 
     try {
-      await addSubject(form);
-      alert("Subject added successfully");
+      if (initialData) {
+        await updateSubject(initialData._id, form);
+        alert("Subject updated successfully");
+      } else {
+        await addSubject(form);
+        alert("Subject added successfully");
+      }
+      if (onSuccess) onSuccess();
       onClose();
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to add subject");
+      setError(err.response?.data?.message || "Failed to save subject");
     }
   };
 
@@ -60,7 +84,7 @@ const AddSubjectModal = ({ open, onClose }) => {
           className="bg-white p-8 rounded-2xl w-full max-w-lg shadow-2xl"
         >
           <div className="flex justify-between mb-4">
-            <h2 className="text-2xl font-bold">Add Subject</h2>
+            <h2 className="text-2xl font-bold">{initialData ? "Edit Subject" : "Add Subject"}</h2>
             <button onClick={onClose}><X /></button>
           </div>
 
@@ -78,6 +102,7 @@ const AddSubjectModal = ({ open, onClose }) => {
             <label className="font-semibold">Category</label>
             <select
               name="categoryId"
+              value={form.categoryId}
               onChange={handleChange}
               className="w-full p-3 border rounded-xl"
             >
@@ -93,13 +118,14 @@ const AddSubjectModal = ({ open, onClose }) => {
             <label className="font-semibold">Term</label>
             <select
               name="termId"
+              value={form.termId}
               onChange={handleChange}
               className="w-full p-3 border rounded-xl"
             >
               <option value="">Select Term</option>
               {terms.map(t => (
                 <option key={t._id} value={t._id}>
-                  {t.schemaId.year} ({new Date(t.startDate).toLocaleDateString()} - {new Date(t.endDate).toLocaleDateString()})
+                  {t.schemaId?.year || "Unknown Year"} ({new Date(t.startDate).toLocaleDateString()} - {new Date(t.endDate).toLocaleDateString()})
                 </option>
               ))}
             </select>
@@ -110,6 +136,7 @@ const AddSubjectModal = ({ open, onClose }) => {
             <label className="font-semibold">Teacher</label>
             <select
               name="teacherId"
+              value={form.teacherId}
               onChange={handleChange}
               className="w-full p-3 border rounded-xl"
             >
@@ -121,7 +148,7 @@ const AddSubjectModal = ({ open, onClose }) => {
           </div>
 
           <div className="mt-6">
-            <Button onClick={handleSubmit}>Create Subject</Button>
+            <Button onClick={handleSubmit}>{initialData ? "Update" : "Create"}</Button>
           </div>
         </motion.div>
       </motion.div>

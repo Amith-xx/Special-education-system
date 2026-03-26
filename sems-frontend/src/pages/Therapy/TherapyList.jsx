@@ -23,7 +23,7 @@ const TherapyList = ({ data, onSelect }) => {
                 <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-4 rounded-xl text-center">
                   <p className="text-sm text-gray-600 font-medium">Date</p>
                   <p className="text-lg font-bold text-gray-800 mt-1">
-                    {therapy.date}
+                    {new Date(therapy.date).toLocaleDateString()}
                   </p>
                 </div>
               </div>
@@ -35,17 +35,17 @@ const TherapyList = ({ data, onSelect }) => {
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.5 }}
                     className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${getTherapyColor(
-                      therapy.type
+                      therapy.therapyType
                     )} flex items-center justify-center text-3xl shadow-lg`}
                   >
-                    {getTherapyIcon(therapy.type)}
+                    {getTherapyIcon(therapy.therapyType)}
                   </motion.div>
                   <div>
                     <p className="text-sm text-gray-500 font-medium">
                       Therapy Type
                     </p>
                     <p className="text-lg font-bold text-gray-800">
-                      {therapy.type}
+                      {therapy.therapyType}
                     </p>
                   </div>
                 </div>
