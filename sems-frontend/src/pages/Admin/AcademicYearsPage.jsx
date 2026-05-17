@@ -63,12 +63,12 @@ const AcademicYearsPage = () => {
     return (
         <div className="flex min-h-screen bg-gray-50">
             <Sidebar activeNav="Academic Years" />
-            <div className="flex-1 p-6 overflow-auto">
-                <div className="flex justify-between items-center mb-6">
+            <div className="flex-1 p-4 pt-16 md:p-6 md:pt-6 overflow-auto">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                     <h1 className="text-3xl font-bold">Academic Years</h1>
                     <button
                         onClick={handleAddNew}
-                        className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700"
+                        className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 w-full md:w-auto"
                     >
                         Add Academic Year
                     </button>
@@ -79,44 +79,49 @@ const AcademicYearsPage = () => {
                 ) : error ? (
                     <p className="text-red-500">{error}</p>
                 ) : (
-                    <div className="bg-white rounded-xl shadow overflow-hidden">
-                        <table className="min-w-full">
-                            <thead className="bg-gray-100">
-                                <tr>
-                                    <th className="p-4 text-left">Year</th>
-                                    <th className="p-4 text-left">Created At</th>
-                                    <th className="p-4 text-left">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {years.map((y) => (
-                                    <tr key={y._id} className="border-t hover:bg-gray-50">
-                                        <td className="p-4 font-bold">{y.year}</td>
-                                        <td className="p-4">{new Date(y.createdAt).toLocaleDateString()}</td>
-                                        <td className="p-4 flex gap-2">
-                                            <button
-                                                onClick={() => handleEdit(y)}
-                                                className="text-yellow-600 hover:text-yellow-800"
-                                            >
-                                                Edit
-                                            </button>
-                                            <button
-                                                onClick={() => handleDelete(y._id)}
-                                                className="text-red-600 hover:text-red-800"
-                                            >
-                                                Delete
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                                {years.length === 0 && (
+                    <>
+                        {/* Desktop table */}
+                        <div className="hidden md:block bg-white rounded-xl shadow overflow-x-auto">
+                            <table className="min-w-full">
+                                <thead className="bg-gray-100">
                                     <tr>
-                                        <td colSpan="3" className="p-4 text-center text-gray-500">No academic years found</td>
+                                        <th className="p-4 text-left">Year</th>
+                                        <th className="p-4 text-left">Created At</th>
+                                        <th className="p-4 text-left">Actions</th>
                                     </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    {years.map((y) => (
+                                        <tr key={y._id} className="border-t hover:bg-gray-50">
+                                            <td className="p-4 font-bold">{y.year}</td>
+                                            <td className="p-4">{new Date(y.createdAt).toLocaleDateString()}</td>
+                                            <td className="p-4 flex gap-2">
+                                                <button onClick={() => handleEdit(y)} className="text-yellow-600 hover:text-yellow-800">Edit</button>
+                                                <button onClick={() => handleDelete(y._id)} className="text-red-600 hover:text-red-800">Delete</button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    {years.length === 0 && (
+                                        <tr><td colSpan="3" className="p-4 text-center text-gray-500">No academic years found</td></tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                        {/* Mobile cards */}
+                        <div className="md:hidden space-y-3">
+                            {years.length === 0 && <div className="bg-white rounded-xl shadow p-6 text-center text-gray-500">No academic years found</div>}
+                            {years.map((y) => (
+                                <div key={y._id} className="bg-white rounded-xl shadow p-4 space-y-1">
+                                    <p className="font-bold text-gray-800">{y.year}</p>
+                                    <p className="text-xs text-gray-400">{new Date(y.createdAt).toLocaleDateString()}</p>
+                                    <div className="flex gap-3 pt-2">
+                                        <button onClick={() => handleEdit(y)} className="text-yellow-600 text-sm font-medium">Edit</button>
+                                        <button onClick={() => handleDelete(y._id)} className="text-red-600 text-sm font-medium">Delete</button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </>
                 )}
 
                 <AddAcademicYearModal

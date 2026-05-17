@@ -38,14 +38,17 @@ const TherapyPage = () => {
     <div className="flex h-screen bg-gray-50">
       <Sidebar activeNav="Therapy" />
 
-      <div className="flex-1 p-8 overflow-auto">
-        <motion.button
-          onClick={() => setShowAddModal(true)}
-          disabled={!selectedStudent}
-          className="mb-6 px-6 py-3 bg-green-600 text-white rounded-xl"
-        >
-          + Add Therapy Report
-        </motion.button>
+      <div className="flex-1 p-4 pt-16 md:p-8 md:pt-8 overflow-auto">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+          <h2 className="text-3xl font-bold text-gray-800">Therapy Tracking</h2>
+          <motion.button
+            onClick={() => setShowAddModal(true)}
+            disabled={!selectedStudent}
+            className="px-6 py-3 bg-green-600 text-white rounded-xl disabled:opacity-50 w-full md:w-auto"
+          >
+            + Add Therapy Report
+          </motion.button>
+        </div>
 
         <TherapyFilter
           selectedStudent={selectedStudent}

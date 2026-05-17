@@ -41,7 +41,7 @@ const handleLogin = async () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-2xl shadow-2xl p-10 w-full max-w-md"
+        className="bg-white rounded-2xl shadow-2xl p-6 sm:p-10 w-full max-w-md"
       >
         <h2 className="text-4xl font-bold text-center text-blue-600 mb-6"
 >
@@ -59,11 +59,6 @@ const handleLogin = async () => {
         <Input label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
 
         <Button onClick={handleLogin}>Login</Button>
-
-        <p className="text-center mt-4 text-sm text-gray-600">
-          Don't have an account?{" "}
-          <a href="/register" className="text-blue-600 font-semibold">Register</a>
-        </p>
       </motion.div>
     </div>
   );

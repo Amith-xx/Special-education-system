@@ -92,7 +92,7 @@ const AddStudentModal = ({ open, onClose, initialData = null, onSuccess }) => {
       return;
     }
 
-    if (!/^\d{10}$/.test(form.emergencyContact)) {
+    if (form.emergencyContact && !/^\d{10}$/.test(form.emergencyContact)) {
       setErrorMsg("Emergency Contact must be exactly 10 digits");
       return;
     }

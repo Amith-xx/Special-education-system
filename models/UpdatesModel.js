@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 const updateSchema = new mongoose.Schema({
   teacherId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Teacher",
+    ref: "User",
     required: true,
   },
   studentId: {

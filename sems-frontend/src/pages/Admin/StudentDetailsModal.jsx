@@ -77,8 +77,8 @@ const StudentDetailsModal = ({ student: initialStudent, role, onClose }) => {
             </div>
           </div>
 
-          {/* AI Student Report - TEACHERS ONLY */}
-          {role === "teacher" && (
+          {/* AI Student Report */}
+          {(role === "teacher" || role === "admin") && (
             <div className="mb-8 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-6 border border-indigo-100">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold flex items-center gap-2 text-indigo-900">
@@ -153,8 +153,8 @@ const StudentDetailsModal = ({ student: initialStudent, role, onClose }) => {
             </div>
           )}
 
-          {/* EVALUATIONS - Hide for Admin */}
-          {role !== "admin" && (
+          {/* EVALUATIONS & THERAPY */}
+          {(role === "teacher" || role === "admin") && (
             <div className="space-y-8">
               <div>
                 <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">

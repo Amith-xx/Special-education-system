@@ -86,19 +86,21 @@ const AdminDashboard = () => {
         {/* ⭐ If Games is selected, show Games page directly */}
         {activeNav === "Dashboard" && (
           <>
-            <h1 className="text-4xl font-bold mb-8">
+            <h1 className="text-2xl md:text-4xl font-bold mb-6 md:mb-8">
               Welcome to Admin Portal
             </h1>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
               {actions.map((action, idx) => (
                 <motion.div
                   key={idx}
-                  className={`p-8 rounded-2xl shadow-xl cursor-pointer text-white bg-gradient-to-br ${action.color}`}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  className={`p-5 md:p-8 rounded-2xl shadow-xl cursor-pointer text-white bg-gradient-to-br ${action.color}`}
                   onClick={action.onClick}
                 >
-                  {action.icon}
-                  <p>{action.name}</p>
+                  <div className="w-7 h-7 md:w-8 md:h-8 mb-2">{action.icon}</div>
+                  <p className="text-sm md:text-base font-semibold">{action.name}</p>
                 </motion.div>
               ))}
             </div>

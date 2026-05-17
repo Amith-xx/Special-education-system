@@ -32,16 +32,21 @@ router.post("/add", authenticate, async (req, res) => {
 
 
 router.get("/", authenticate, async (req, res) => {
-  if (!["teacher", "admin"].includes(req.user.role)) {
-    return res.status(403).json({ message: "Not allowed" });
-  }
-  const { studentId, type } = req.query;
-  const filter = {};
-  if (studentId) filter.studentId = studentId;
-  if (type) filter.therapyType = type;
+  try {
+    if (!["teacher", "admin"].includes(req.user.role)) {
+      return res.status(403).json({ message: "Not allowed" });
+    }
+    const { studentId, type } = req.query;
+    const filter = {};
+    if (studentId) filter.studentId = studentId;
+    if (type) filter.therapyType = type;
 
-  const logs = await TherapyLog.find(filter).populate("studentId");
-  res.json(logs);
+    const logs = await TherapyLog.find(filter).populate("studentId");
+    res.json(logs);
+  } catch (err) {
+    console.error("Therapy fetch error:", err);
+    res.status(500).json({ message: "Failed to fetch therapy logs", error: err.message });
+  }
 });
 
 export default router;

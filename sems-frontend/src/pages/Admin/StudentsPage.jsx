@@ -96,8 +96,8 @@ const StudentsPage = () => {
           </select>
         </div>
 
-        {/* Table */}
-        <div className="overflow-x-auto bg-white rounded-xl shadow">
+        {/* Desktop Table */}
+        <div className="hidden md:block overflow-x-auto bg-white rounded-xl shadow">
           <table className="min-w-full border">
             <thead className="bg-gray-100">
               <tr>
@@ -110,47 +110,50 @@ const StudentsPage = () => {
             </thead>
             <tbody>
               {students.map((s) => (
-                <tr key={s._id} className="border-t">
-                  <td className="p-3">{s.name}</td>
+                <tr key={s._id} className="border-t hover:bg-gray-50">
+                  <td className="p-3 font-medium">{s.name}</td>
                   <td className="p-3">{s.categoryId?.name}</td>
                   <td className="p-3">{s.classId?.name}</td>
                   <td className="p-3">{s.academicYearId?.year}</td>
-                  <td className="p-4 flex gap-2">
-                    <button
-                      onClick={() => handleView(s)}
-                      className="text-blue-600 hover:text-blue-800"
-                    >
-                      View
-                    </button>
+                  <td className="p-3 flex gap-2">
+                    <button onClick={() => handleView(s)} className="text-blue-600 hover:text-blue-800 text-sm">View</button>
                     {user.role === "admin" && (
                       <>
-                        <button
-                          onClick={() => handleEdit(s)}
-                          className="text-yellow-600 hover:text-yellow-800"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDelete(s._id)}
-                          className="text-red-600 hover:text-red-800"
-                        >
-                          Delete
-                        </button>
+                        <button onClick={() => handleEdit(s)} className="text-yellow-600 hover:text-yellow-800 text-sm">Edit</button>
+                        <button onClick={() => handleDelete(s._id)} className="text-red-600 hover:text-red-800 text-sm">Delete</button>
                       </>
                     )}
                   </td>
                 </tr>
               ))}
-
               {students.length === 0 && (
-                <tr>
-                  <td colSpan="5" className="p-6 text-center text-gray-500">
-                    No students found
-                  </td>
-                </tr>
+                <tr><td colSpan="5" className="p-6 text-center text-gray-500">No students found</td></tr>
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile card list */}
+        <div className="md:hidden space-y-3">
+          {students.length === 0 && (
+            <div className="bg-white rounded-xl shadow p-6 text-center text-gray-500">No students found</div>
+          )}
+          {students.map((s) => (
+            <div key={s._id} className="bg-white rounded-xl shadow p-4 space-y-1">
+              <p className="font-bold text-gray-800">{s.name}</p>
+              <p className="text-sm text-gray-500">{s.categoryId?.name} · {s.classId?.name}</p>
+              <p className="text-xs text-gray-400">{s.academicYearId?.year}</p>
+              <div className="flex gap-3 pt-2">
+                <button onClick={() => handleView(s)} className="text-blue-600 text-sm font-medium">View</button>
+                {user.role === "admin" && (
+                  <>
+                    <button onClick={() => handleEdit(s)} className="text-yellow-600 text-sm font-medium">Edit</button>
+                    <button onClick={() => handleDelete(s._id)} className="text-red-600 text-sm font-medium">Delete</button>
+                  </>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Modal */}

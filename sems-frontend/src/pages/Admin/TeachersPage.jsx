@@ -59,44 +59,49 @@ const TeachersPage = () => {
                 ) : error ? (
                     <p className="text-red-500">{error}</p>
                 ) : (
-                    <div className="bg-white rounded-xl shadow overflow-x-auto">
-                        <table className="min-w-full">
-                            <thead className="bg-gray-100">
-                                <tr>
-                                    <th className="p-4 text-left">Name</th>
-                                    <th className="p-4 text-left">Email</th>
-                                    <th className="p-4 text-left">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {teachers.map((t) => (
-                                    <tr key={t._id} className="border-t hover:bg-gray-50">
-                                        <td className="p-4">{t.fullName}</td>
-                                        <td className="p-4">{t.email}</td>
-                                        <td className="p-4 flex gap-2">
-                                            <button
-                                                onClick={() => handleEdit(t)}
-                                                className="text-yellow-600 hover:text-yellow-800"
-                                            >
-                                                Edit
-                                            </button>
-                                            <button
-                                                onClick={() => handleDelete(t._id)}
-                                                className="text-red-600 hover:text-red-800"
-                                            >
-                                                Delete
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                                {teachers.length === 0 && (
+                    <>
+                        {/* Desktop table */}
+                        <div className="hidden md:block bg-white rounded-xl shadow overflow-x-auto">
+                            <table className="min-w-full">
+                                <thead className="bg-gray-100">
                                     <tr>
-                                        <td colSpan="3" className="p-4 text-center text-gray-500">No teachers found</td>
+                                        <th className="p-4 text-left">Name</th>
+                                        <th className="p-4 text-left">Email</th>
+                                        <th className="p-4 text-left">Actions</th>
                                     </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    {teachers.map((t) => (
+                                        <tr key={t._id} className="border-t hover:bg-gray-50">
+                                            <td className="p-4">{t.fullName}</td>
+                                            <td className="p-4">{t.email}</td>
+                                            <td className="p-4 flex gap-2">
+                                                <button onClick={() => handleEdit(t)} className="text-yellow-600 hover:text-yellow-800">Edit</button>
+                                                <button onClick={() => handleDelete(t._id)} className="text-red-600 hover:text-red-800">Delete</button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    {teachers.length === 0 && (
+                                        <tr><td colSpan="3" className="p-4 text-center text-gray-500">No teachers found</td></tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                        {/* Mobile cards */}
+                        <div className="md:hidden space-y-3">
+                            {teachers.length === 0 && <div className="bg-white rounded-xl shadow p-6 text-center text-gray-500">No teachers found</div>}
+                            {teachers.map((t) => (
+                                <div key={t._id} className="bg-white rounded-xl shadow p-4 space-y-1">
+                                    <p className="font-bold text-gray-800">{t.fullName}</p>
+                                    <p className="text-sm text-gray-500">{t.email}</p>
+                                    <div className="flex gap-3 pt-2">
+                                        <button onClick={() => handleEdit(t)} className="text-yellow-600 text-sm font-medium">Edit</button>
+                                        <button onClick={() => handleDelete(t._id)} className="text-red-600 text-sm font-medium">Delete</button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </>
                 )}
 
                 <EditTeacherModal

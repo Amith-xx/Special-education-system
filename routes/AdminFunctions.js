@@ -161,27 +161,6 @@ router.put("/updateTerm/:id", authenticate, async (req, res) => {
   }
 });
 
-router.delete("/deleteTerm/:id", authenticate, async (req, res) => {
-  try {
-    if (req.user.role !== "admin") return res.status(403).json({ message: "Admins only" });
-    await Term.findByIdAndDelete(req.params.id);
-    res.json({ message: "Term deleted successfully" });
-  } catch (err) {
-    res.status(500).json({ message: "Server error", error: err.message });
-  }
-});
-
-router.put("/updateTerm/:id", authenticate, async (req, res) => {
-  try {
-    if (req.user.role !== "admin") return res.status(403).json({ message: "Admins only" });
-    const { startDate, endDate, schemaId } = req.body;
-    await Term.findByIdAndUpdate(req.params.id, { startDate, endDate, schemaId });
-    res.json({ message: "Term updated successfully" });
-  } catch (err) {
-    res.status(500).json({ message: "Server error", error: err.message });
-  }
-});
-
 router.post("/addSubject", authenticate, async (req, res) => {
   try {
     const { name, categoryId, termId, teacherId } = req.body;
@@ -371,21 +350,17 @@ router.get("/classes", authenticate, async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 });
-// GET classes by academic year + category
+// GET classes filtered by categoryId (academicYearId filter removed — ClassModel has no such field)
 router.get("/classes/filter", authenticate, async (req, res) => {
   try {
-    const { academicYearId, categoryId } = req.query;
+    const { categoryId } = req.query;
 
-    if (!academicYearId || !categoryId) {
-      return res.status(400).json({
-        message: "academicYearId and categoryId are required",
-      });
-    }
+    const filter = {};
+    if (categoryId) filter.categoryId = categoryId;
 
-    const classes = await Class.find({
-      academicYearId,
-      categoryId,
-    });
+    const classes = await Class.find(filter)
+      .populate("categoryId", "name")
+      .populate("teacherId", "fullName email");
 
     res.json(classes);
   } catch (err) {
@@ -519,10 +494,9 @@ router.delete("/deleteStudent/:id", authenticate, async (req, res) => {
 router.put("/updateStudent/:id", authenticate, async (req, res) => {
   try {
     if (req.user.role !== "admin") return res.status(403).json({ message: "Admins only" });
-    // basic update, expand as needed
-    const { name, categoryId, classId, academicYearId } = req.body;
+    const { name, dob, categoryId, classId, academicYearId, behaviour, hobby, healthIssues, emergencyContact, consultantDr, drNumber } = req.body;
     await Student.findByIdAndUpdate(req.params.id, {
-      name, categoryId, classId, academicYearId
+      name, dob, categoryId, classId, academicYearId, behaviour, hobby, healthIssues, emergencyContact, consultantDr, drNumber
     });
     res.json({ message: "Student updated successfully" });
   } catch (err) {

@@ -2,7 +2,7 @@ import API from "./authApi";
 
 // Get teacher classes
 export const getTeacherClasses = () =>
-  API.get("/api/teacher/teacher/classes");
+  API.get("/api/teacher/classes");
 
 // Get students by class
 export const getStudentsByClass = (classId) =>
@@ -12,7 +12,7 @@ export const getStudentsByClass = (classId) =>
 
 // Get subjects
 export const getSubjects = () =>
-  API.get("/api/admin/getSubjects");
+  API.get("/api/admin/subjects");
 
 // Get terms
 export const getTerms = () =>
@@ -25,5 +25,3 @@ export const getEvaluations = (params) =>
 // Add evaluation
 export const addEvaluation = (data) =>
   API.post("/api/teacher/addEvaluation", data);
-
-

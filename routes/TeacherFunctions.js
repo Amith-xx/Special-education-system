@@ -93,8 +93,7 @@ router.get("/classes", authenticate, async (req, res) => {
     const classes = await Class.find({
       teacherId: req.user.id,
     })
-      .populate("categoryId", "name")
-      .populate("academicYearId", "year");
+      .populate("categoryId", "name");
 
     console.log("Teacher Classes Found:", classes.length);
     res.json(classes);
@@ -113,13 +112,14 @@ router.get("/classes", authenticate, async (req, res) => {
 // GET evaluations (teacher/admin)
 router.get("/evaluations", authenticate, async (req, res) => {
   try {
-    if (req.user.role !== "teacher") {
-      return res.status(403).json({ message: "Teachers only" });
+    if (!["teacher", "admin"].includes(req.user.role)) {
+      return res.status(403).json({ message: "Not allowed" });
     }
 
-    const evaluations = await Evaluation.find({
-      evaluatedBy: req.user.id,
-    })
+    // Teachers see only their own evaluations; admins see all
+    const filter = req.user.role === "teacher" ? { evaluatedBy: req.user.id } : {};
+
+    const evaluations = await Evaluation.find(filter)
       .populate("studentId", "name")        // Student model
       .populate("subjectId", "name")        // Subject model
       .populate("termId", "startDate")

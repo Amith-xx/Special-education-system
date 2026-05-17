@@ -72,55 +72,57 @@ const SubjectsPage = () => {
                 ) : error ? (
                     <p className="text-red-500">{error}</p>
                 ) : (
-                    <div className="bg-white rounded-xl shadow overflow-x-auto">
-                        <table className="min-w-full">
-                            <thead className="bg-gray-100">
-                                <tr>
-                                    <th className="p-4 text-left">Name</th>
-                                    <th className="p-4 text-left">Category</th>
-                                    <th className="p-4 text-left">Term</th>
-                                    <th className="p-4 text-left">Teacher</th>
-                                    <th className="p-4 text-left">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {subjects.map((s) => (
-                                    <tr key={s._id} className="border-t hover:bg-gray-50">
-                                        <td className="p-4 font-medium">{s.name}</td>
-                                        <td className="p-4">{s.categoryId?.name}</td>
-                                        <td className="p-4">
-                                            {s.termId ? (
-                                                <span>
-                                                    {new Date(s.termId.startDate).toLocaleDateString()} -
-                                                    {new Date(s.termId.endDate).toLocaleDateString()}
-                                                </span>
-                                            ) : "-"}
-                                        </td>
-                                        <td className="p-4">{s.teacherId?.fullName}</td>
-                                        <td className="p-4 flex gap-2">
-                                            <button
-                                                onClick={() => handleEdit(s)}
-                                                className="text-yellow-600 hover:text-yellow-800"
-                                            >
-                                                Edit
-                                            </button>
-                                            <button
-                                                onClick={() => handleDelete(s._id)}
-                                                className="text-red-600 hover:text-red-800"
-                                            >
-                                                Delete
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                                {subjects.length === 0 && (
+                    <>
+                        {/* Desktop table */}
+                        <div className="hidden md:block bg-white rounded-xl shadow overflow-x-auto">
+                            <table className="min-w-full">
+                                <thead className="bg-gray-100">
                                     <tr>
-                                        <td colSpan="5" className="p-4 text-center text-gray-500">No subjects found</td>
+                                        <th className="p-4 text-left">Name</th>
+                                        <th className="p-4 text-left">Category</th>
+                                        <th className="p-4 text-left">Term</th>
+                                        <th className="p-4 text-left">Teacher</th>
+                                        <th className="p-4 text-left">Actions</th>
                                     </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    {subjects.map((s) => (
+                                        <tr key={s._id} className="border-t hover:bg-gray-50">
+                                            <td className="p-4 font-medium">{s.name}</td>
+                                            <td className="p-4">{s.categoryId?.name}</td>
+                                            <td className="p-4">
+                                                {s.termId ? `${new Date(s.termId.startDate).toLocaleDateString()} – ${new Date(s.termId.endDate).toLocaleDateString()}` : "-"}
+                                            </td>
+                                            <td className="p-4">{s.teacherId?.fullName}</td>
+                                            <td className="p-4 flex gap-2">
+                                                <button onClick={() => handleEdit(s)} className="text-yellow-600 hover:text-yellow-800">Edit</button>
+                                                <button onClick={() => handleDelete(s._id)} className="text-red-600 hover:text-red-800">Delete</button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    {subjects.length === 0 && (
+                                        <tr><td colSpan="5" className="p-4 text-center text-gray-500">No subjects found</td></tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                        {/* Mobile cards */}
+                        <div className="md:hidden space-y-3">
+                            {subjects.length === 0 && <div className="bg-white rounded-xl shadow p-6 text-center text-gray-500">No subjects found</div>}
+                            {subjects.map((s) => (
+                                <div key={s._id} className="bg-white rounded-xl shadow p-4 space-y-1">
+                                    <p className="font-bold text-gray-800">{s.name}</p>
+                                    <p className="text-sm text-gray-500">{s.categoryId?.name}</p>
+                                    <p className="text-sm text-gray-500">Teacher: {s.teacherId?.fullName}</p>
+                                    {s.termId && <p className="text-xs text-gray-400">{new Date(s.termId.startDate).toLocaleDateString()} – {new Date(s.termId.endDate).toLocaleDateString()}</p>}
+                                    <div className="flex gap-3 pt-2">
+                                        <button onClick={() => handleEdit(s)} className="text-yellow-600 text-sm font-medium">Edit</button>
+                                        <button onClick={() => handleDelete(s._id)} className="text-red-600 text-sm font-medium">Delete</button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </>
                 )}
 
                 <AddSubjectModal

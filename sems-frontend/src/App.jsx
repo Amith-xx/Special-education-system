@@ -32,13 +32,6 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
 
 
-        {/* DASHBOARDS */}
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-      
-        {/* OTHER FEATURES */}
-        <Route path="/behavior" element={<BehaviorPage />} />
-        <Route path="/therapy" element={<TherapyPage />} />
-
         {/* ADMIN ROUTES */}
         <Route
           path="/admin/dashboard"
