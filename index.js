@@ -28,6 +28,11 @@ app.use("/api/therapy", TherapyRoutes);    // therapy logs
 app.use("/api/behavior", BehaviorRoutes);  // behavior logs
 app.use("/api/ai", AIRoutes);              // AI reports
 
-app.listen(PORT, () => {
-  console.log(`Server running → http://localhost:${PORT}`);
-});
+// Only start HTTP server locally — Vercel invokes the app directly as a serverless function
+if (process.env.VERCEL !== "1") {
+  app.listen(PORT, () => {
+    console.log(`Server running → http://localhost:${PORT}`);
+  });
+}
+
+export default app;
