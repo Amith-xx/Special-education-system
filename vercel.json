@@ -4,12 +4,18 @@
     {
       "src": "index.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "sems-frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
     }
   ],
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.js"
-    }
+    { "src": "/api/(.*)", "dest": "/index.js" },
+    { "src": "/auth/(.*)", "dest": "/index.js" },
+    { "src": "/(.*)", "dest": "/sems-frontend/dist/$1" }
   ]
 }
