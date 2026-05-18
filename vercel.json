@@ -16,6 +16,8 @@
   "routes": [
     { "src": "/api/(.*)", "dest": "/index.js" },
     { "src": "/auth/(.*)", "dest": "/index.js" },
-    { "src": "/(.*)", "dest": "/sems-frontend/dist/$1" }
+    { "src": "/assets/(.*)", "dest": "/sems-frontend/dist/assets/$1" },
+    { "src": "/(.*\\..*)", "dest": "/sems-frontend/dist/$1" },
+    { "src": "/(.*)", "dest": "/sems-frontend/dist/index.html" }
   ]
 }
