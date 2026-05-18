@@ -1,5 +1,12 @@
 # Special Education Management System
 
+## Demo
+
+<a href="SEMS_Demo (1) (1).mp4" target="_blank">
+  <img src="https://your-thumbnail-image-url.jpg" alt="Click to watch demo" width="600">
+</a>
+
+Click the image above to watch the demo video.
 ## Overview
 The Special Education Management System (SEMS) is designed to assist in the management of special education programs effectively. This system aims to streamline the processes involved in providing quality educational support to students with special needs.
 
