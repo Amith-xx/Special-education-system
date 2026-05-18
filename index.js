@@ -35,7 +35,7 @@ app.use("/api/behavior", BehaviorRoutes);  // behavior logs
 app.use("/api/ai", AIRoutes);              // AI reports
 
 // Fallback to frontend for client-side routing (SPA)
-app.get("*", (req, res) => {
+app.get("/{*splat}", (req, res) => {
   res.sendFile(path.join(__dirname, "sems-frontend/dist/index.html"));
 });
 
