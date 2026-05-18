@@ -2,7 +2,7 @@
 
 ## Demo
 
-<a href="SEMS_Demo (1) (1).mp4" target="_blank">
+<a href="https://vimeo.com/1193143680?share=copy&fl=sv&fe=ci" target="_blank">
   <img src="https://your-thumbnail-image-url.jpg" alt="Click to watch demo" width="600">
 </a>
 
